@@ -1,0 +1,24 @@
+<div id="countries-data">
+    {% for country, coordinates in countries_list.items() %}
+        <div class="every-item">
+            <span>{{ country }}</span>
+            <button class="delete-button"
+                data-type="country"
+                data-name="{{ country }}"
+                data-lat="{{ coordinates[0] }}"
+                data-lon="{{ coordinates[1] }}">×</button>
+        </div>
+    {% endfor %}
+</div>
+
+<div id="cities-data">
+    {% for city, coordinates in cities_list.items() %}
+        <div class="every-item">
+            <span>{{ city }}</span>
+            <button class="delete-button"
+                    data-type="city"
+                    data-lat="{{ coordinates[0] }}"
+                    data-lon="{{ coordinates[1] }}">×</button>
+        </div>
+    {% endfor %}
+</div>
