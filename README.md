@@ -48,11 +48,11 @@ The system allows you to delete saved locations either from the lists or, for ci
 <img src="map_project/screenshots/image-5.png" width="700">
 
 For this project, I used SQLite, Flask, Folium, and Requests.
-My project structure consists of three main folders: data, backend, and frontend.
-In the data folder, I store the GeoJSON data containing country borders.
-The backend folder contains three main files:
-- search_api.py: sends requests to Nominatim to retrieve coordinates for locations that I want to add to the map.
-- database.py: creates and manages the database. It also contains all the functions for saving, deleting, and retrieving data from the database.
-- borders.py: processes the GeoJSON data from the data folder and uses it to draw the layers of visited countries on the map.
+My project structure consists of three main folders: `data`, `backend`, and `frontend`.
+In the `data` folder, I store the GeoJSON data containing country borders.
+The `backend` folder contains three main files:
+- `search_api.py`: sends requests to Nominatim to retrieve coordinates for locations that I want to add to the map.
+- `database.py`: creates and manages the database. It also contains all the functions for saving, deleting, and retrieving data from the database.
+- `borders.py`: processes the GeoJSON data from the data folder and uses it to draw the layers of visited countries on the map.
 
-In the frontend, I create the map in map.py and the website itself in website.py. The templates folder contains the HTML structure of the website's pages, while the static folder contains the CSS used to design the website.
+In the `frontend` folder, I create the map in `map.py` and the website itself in `website.py`. The templates folder contains the HTML structure of the website's pages, while the static folder contains the CSS used to design the website.
