@@ -1,0 +1,5 @@
+Flask
+Werkzeug
+python-dotenv
+folium
+requests
