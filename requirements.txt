@@ -3,3 +3,4 @@ Werkzeug
 python-dotenv
 folium
 requests
+gunicorn
