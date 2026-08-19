@@ -21,3 +21,10 @@ def countries_borders(user_id):
             full_geojson.data["features"].remove(feature)
     return full_geojson
 
+def one_country(country_name):
+    full_geojson = all_countries()
+    for feature in full_geojson.data["features"][:]:    
+        name = feature["properties"]["NAME"]  
+        if name != country_name:
+            full_geojson.data["features"].remove(feature)
+    return full_geojson

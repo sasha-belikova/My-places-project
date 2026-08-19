@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from frontend.map import build_map, noId_build_map
 from backend.search_api import search
 from backend.database import save, show_countries, show_cities, delete, login
-from backend.borders import countries_borders
+from backend.borders import countries_borders, one_country
 import os
 from dotenv import load_dotenv
 
@@ -86,7 +86,8 @@ def save_web():
     if result is None:
         return jsonify({"found": False})
     save(user_id, result)
-    return jsonify({"found": True, "status": "saved", "type": result.get("addresstype"), "country_name": result.get("country_name")})
+    new_geo = one_country(result.get("country_name"))
+    return jsonify({"found": True, "status": "saved", "type": result.get("addresstype"), "geojson": new_geo.data, "country_name": result.get("country_name")})
 
 
 @website.route("/places/")
@@ -121,5 +122,3 @@ def my_places():
 
 if __name__ == '__main__':
     website.run(debug = True)
-
-
