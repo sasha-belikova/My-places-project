@@ -11,6 +11,10 @@ load_dotenv()
 website = Flask(__name__)
 website.secret_key = os.getenv("SECRET_KEY")
 
+@website.route("/")
+def start():
+    return redirect("/home/")
+
 @website.route("/home/")
 def home():
     folium_map = noId_build_map()
@@ -61,7 +65,6 @@ def index():
                            user_id = user_id, 
                            countries_layer_name = countries_layer_name, city_layer_name = city_layer_name,
                            countries_list = countries_list, cities_list = cities_list)
-
 
 
 @website.route("/search/", methods=["POST"])

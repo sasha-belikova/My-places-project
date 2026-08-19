@@ -72,25 +72,42 @@
 </script>
 
 <script>
+    function escapeHTML (text) 
+        {return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");}
 
-    function searchPlace() 
-        {let place = document.getElementById("place").value;
-        fetch("/search/",
-            {method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded",},
-            body: "place=" + place})
-            .then(response =>
-                {return response.json();})
-            .then(data =>
-                {console.log("ANSWER FROM FLASK", data);
-            let placeName;
-            if (data.city_name) {placeName = data.city_name;}
-            else {placeName = data.country_name;}
-            let marker = L.marker([data.lat ?? data.country_lat,data.lon ?? data.country_lon])
-            .addTo(myMap)
-            .bindPopup(`<div class="place-name">${placeName}</div>`);
-            marker.openPopup();})
-    }
+    function searchPlace() {
+    console.log("CLICK");
+
+    let place = document.getElementById("place").value;
+
+    fetch("/search/", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: "place=" + encodeURIComponent(place)})
+    .then(response => {
+        console.log("RESPONSE", response);
+        return response.json();})
+    .then(data => {
+        console.log("ANSWER FROM FLASK", data);
+
+        let placeName = data.city_name ?? data.country_name;
+
+        let marker = L.marker([
+            data.lat ?? data.country_lat,
+            data.lon ?? data.country_lon])
+        .addTo(myMap)
+        .bindPopup(`<div class="save-popup"><div class="place-name">${escapeHTML(placeName)}</div></div>`);
+        marker.openPopup();
+        marker.on("popupclose", function() {
+            myMap.removeLayer(marker);
+        });
+    });
+}
     
 
     const username = document.getElementById("username");
