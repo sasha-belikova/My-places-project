@@ -13,13 +13,16 @@ def all_countries():
 
 
 def countries_borders(user_id):
-    full_geojson = all_countries()
     chosen_countries = show_countries(user_id)
-    for feature in full_geojson.data["features"][:]:    
-        country_name = feature["properties"]["NAME"]    
-        if not(country_name in chosen_countries):
-            full_geojson.data["features"].remove(feature)
-    return full_geojson
+    countries = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+    for feature in full_geojson["features"]:
+        country_name = feature["properties"]["NAME"]
+        if country_name in chosen_countries:
+            countries["features"].append(feature)
+    return folium.GeoJson(countries)
 
 def one_country(country_name):
     full_geojson = all_countries()
