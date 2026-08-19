@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, s
 from frontend.map import build_map, noId_build_map
 from backend.search_api import search
 from backend.database import save, show_countries, show_cities, delete, login
-from backend.borders import one_country, countries_borders
+from backend.borders import countries_borders
 import os
 from dotenv import load_dotenv
 
@@ -39,7 +39,7 @@ def login_page():
     return redirect(url_for("index"))
 
 
-@website.route("/home")
+@website.route("/my_home")
 def index():
     user_id = session.get("user_id")
 
@@ -77,19 +77,18 @@ def search_box():
 @website.route("/save/", methods=["POST"])
 def save_web():
     user_id = session.get("user_id")
-    if user_id is None:
-        return jsonify({"error": "Not logged in"}), 401
-    result = request.json
+    data = request.json
+    name = data.get("name")
+    result = search(name)
+    if result is None:
+        return jsonify({"found": False})
     save(user_id, result)
-    new_geo = one_country(result.get("country_name"))
-    return jsonify({"status": "saved", "type": result.get("addresstype"), "geojson": new_geo.data, "country_name": result.get("country_name")})
+    return jsonify({"found": True, "status": "saved", "type": result.get("addresstype"), "country_name": result.get("country_name")})
 
 
 @website.route("/places/")
 def data_apdate():
     user_id = session.get("user_id")
-    if user_id is None:
-        return jsonify({"error": "Not logged in"}), 401
     update_countries = show_countries(user_id)
     update_cities = show_cities(user_id)
     return render_template("list.html", countries_list = update_countries, cities_list = update_cities)
@@ -98,8 +97,6 @@ def data_apdate():
 @website.route("/map-data/")
 def map_data():
     user_id = session.get("user_id")
-    if user_id is None:
-        return jsonify({"error": "Not logged in"}), 401
     countries = countries_borders(user_id)
     cities = show_cities(user_id)
     return jsonify({"countries": countries.data, "cities": cities})
@@ -108,8 +105,6 @@ def map_data():
 @website.route("/delete/", methods=["POST"])
 def delete_place():
     user_id = session.get("user_id")
-    if user_id is None:
-        return jsonify({"error": "Not logged in"}), 401
     result = request.json
     delete(user_id, result)
     return jsonify({"success": True})

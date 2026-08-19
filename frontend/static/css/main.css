@@ -386,3 +386,15 @@ div.folium-map {
     align-items: center;
     justify-content: center;
 }
+
+#not-found {
+    display: none;
+    position: absolute;
+    right: 5%;
+    width: 335px !important;
+    height: 35px;
+    top: 19px;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}

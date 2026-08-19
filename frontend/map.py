@@ -26,7 +26,7 @@ def build_map(user_id):
     ft = folium.FeatureGroup(name="Visited cities", show=False).add_to(m)
     city_layer_name = ft.get_name()
     for city, coordinates in p.items():
-        folium.Marker(location = coordinates, popup = city, icon=folium.Icon(icon='star', color='purple')).add_to(ft)
+        folium.Marker(location = [coordinates["latitude"], coordinates["longitude"]], popup = city, icon=folium.Icon(icon='star', color='purple')).add_to(ft)
 
     MiniMap().add_to(m)
     folium.LayerControl().add_to(m)

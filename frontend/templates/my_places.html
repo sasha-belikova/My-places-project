@@ -26,7 +26,7 @@
         <input class="form-control" type="text" id="place" name="place" autocomplete="off">
         <button class="btn btn-primary" id="search-button" type="button">SEARCH</button>
     </form>
-
+    <div class="alert alert-warning" role="alert" id = "not-found"> Place was not found! </div>
     <div id="save-message" class="alert alert-success" role="alert">SAVED</div>
     
 
@@ -152,7 +152,12 @@
                         {let save_message = document.getElementById("save-message")
                         save_message.style.display = "flex";
                         setTimeout(function() {save_message.style.display = "none"}, 5000);}
+    
 
+    function show_not_found()
+                        {let not_found = document.getElementById("not-found")
+                        not_found.style.display = "flex";
+                        setTimeout(function() {not_found.style.display = "none"}, 5000);}
 
     const databaseButton = document.getElementById("database-show");
     const placesOptions = document.getElementById("places-options");
@@ -208,14 +213,22 @@
                 {let saved_Icon = L.AwesomeMarkers.icon
                     ({icon: "star",
                     markerColor: "purple"});
-                L.marker(coordinates, {icon: saved_Icon})
+                L.marker([coordinates.latitude, coordinates.longitude], {icon: saved_Icon})
                 .bindPopup(`<div class="city-popup">
                     <div class="city-name">${city}</div>
                     <button class="btn btn-outline-danger popup-delete-button"
-                    data-lat="${coordinates[0]}"
-                    data-lon="${coordinates[1]}"
+                    data-id="${coordinates.id}"
+                    data-type="city"
                     type="button">DELETE</button>`)
                 .addTo(city_layer);});});}
+    
+    function escapeHTML (text) 
+        {return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");}
 
     updateMap();            
     updateLists(); 
@@ -225,19 +238,9 @@
             !event.target.classList.contains("popup-delete-button"))
             {return;}
         const button = event.target;
-        const result =
-            {lat: button.dataset.lat,
-            lon: button.dataset.lon};
-
-        if (button.dataset.type === "country") 
-            {result.country_lat = result.lat;
-            result.country_lon = result.lon;
-            result.country_name = button.dataset.name;
-            delete result.lat;
-            delete result.lon;} 
-        else 
-            {result.addresstype = "city";}
-
+        const result = 
+            {id: button.dataset.id,
+            type: button.dataset.type};
         fetch("/delete/", 
             {method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -289,15 +292,15 @@
         {console.log("ANSWER FROM FLASK", data);
 
 
-        let placeName;
-        if (data.city_name) {placeName = data.city_name;} 
-        else {placeName = data.country_name;}
+        let placeType;
+        if (data.city_name) {placeType = "city";} 
+        else {placeType = "country";}
 
-
+        let placeName = data.city_name ?? data.country_name;
         let marker = L.marker([data.lat ?? data.country_lat,data.lon ?? data.country_lon])
         .addTo(myMap)
         .bindPopup(`<div class="save-popup">
-            <div class="place-name">${placeName}</div>
+            <div class="place-name">${escapeHTML(placeName)}</div>
             <button class="btn btn-outline-success save-button"
             type="button">SAVE</button></div>`);
 
@@ -306,22 +309,21 @@
                 {fetch("/save/", 
                     {method: "POST",
                     headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(data)})
+                    body: JSON.stringify({name: placeName})})
                 .then(response => response.json())
-                .then(result => {
-                    show_saved_messsage();
-                    console.log("SAVE RESULT", result);
-                    myMap.removeLayer(marker);
-                    updateMap();
-                    updateLists();})
-                .catch(error => {
-                    console.log("SAVE ERROR", error);
-                });
+                .then(result => 
+                {if (!result.found) 
+                    {show_not_found();
+                    return;}
+                show_saved_messsage();
+                myMap.removeLayer(marker);
+                updateMap();
+                updateLists();});
+                };
+            });
 
-            };
-
-        });
-
+        marker.on("popupclose", function() 
+            {myMap.removeLayer(marker);});
 
         marker.openPopup();
 
