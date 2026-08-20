@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 website = Flask(__name__)
-website.secret_key = os.getenv("SECRET_KEY")
+website.secret_key = os.getenv("SECRET_KEY", "test-secret-key")
 
 @website.route("/")
 def start():
