@@ -17,6 +17,9 @@ python main.py
 
 ```text
 map_project/
+├── .github/
+│   └── workflows
+│       └── tests.yml
 ├── backend/
 │   ├── __init__.py
 │   ├── borders.py
