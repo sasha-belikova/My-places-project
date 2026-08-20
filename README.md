@@ -74,7 +74,7 @@ The system allows you to delete saved locations either from the lists or, for ci
 
 <img src="screenshots/image-5.png" width="700">
 
-For this project, I used Python, Flask, Werkzeug, python-dotenv, Folium, Requests, Gunicorn, and Pytest. My project is organized into five main folders: `backend`, `data`, `frontend`, and `tests`.
+For this project, I used Python, Flask, Werkzeug, python-dotenv, Folium, Requests, Gunicorn, and Pytest. My project is organized into four main folders: `backend`, `data`, `frontend`, and `tests`.
 
 The `data` folder contains countries.geojson, which stores the GeoJSON data used to display country borders on the map.
 
