@@ -24,10 +24,3 @@ def countries_borders(user_id):
             countries["features"].append(feature)
     return folium.GeoJson(countries)
 
-def one_country(country_name):
-    full_geojson = all_countries()
-    for feature in full_geojson.data["features"][:]:    
-        name = feature["properties"]["NAME"]  
-        if name != country_name:
-            full_geojson.data["features"].remove(feature)
-    return full_geojson

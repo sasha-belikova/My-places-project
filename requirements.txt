@@ -4,3 +4,4 @@ python-dotenv
 folium
 requests
 gunicorn
+pytest
