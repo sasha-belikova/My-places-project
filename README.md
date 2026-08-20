@@ -17,29 +17,37 @@ python main.py
 
 ```text
 map_project/
-├── README.md
-├── requirements.txt
-├── main.py
-├── __init__.py
 ├── backend/
 │   ├── __init__.py
 │   ├── borders.py
 │   ├── database.py
 │   └── search_api.py
+├── data/
+│   └── countries.geojson
 ├── frontend/
-│   ├── __init__.py
-│   ├── map.py
-│   ├── website.py
 |   ├── static
 |       └── css/
 |           └── main.css
-│   └── templates/
+│   ├── templates/
 │       ├── home.html
 │       ├── list.html
 │       └── my_places.html
-├── data/
-│   └── countries.geojson
-└── screenshots/
+│   ├── __init__.py
+│   ├── map.py
+│   └── website.py
+├── screenshots/
+├── tests/
+│   ├── __init__.py
+│   ├── test_borders.py
+│   ├── test_database.py
+│   ├── test_map.py
+│   ├── test_search_api.py
+│   └── test_website.py
+├── .gitignore
+├── README.md
+├── __init__.py
+├── main.py
+└── requirements.txt
 ```
 
 
@@ -63,12 +71,20 @@ The system allows you to delete saved locations either from the lists or, for ci
 
 <img src="screenshots/image-5.png" width="700">
 
-For this project, I used SQLite, Flask, Folium, and Requests.
-My project structure consists of three main folders: `data`, `backend`, and `frontend`.
-In the `data` folder, I store the GeoJSON data containing country borders.
-The `backend` folder contains three main files:
-- `search_api.py`: sends requests to Nominatim to retrieve coordinates for locations that I want to add to the map.
-- `database.py`: creates and manages the database. It also contains all the functions for saving, deleting, and retrieving data from the database.
-- `borders.py`: processes the GeoJSON data from the data folder and uses it to draw the layers of visited countries on the map.
+For this project, I used Python, Flask, Werkzeug, python-dotenv, Folium, Requests, Gunicorn, and Pytest. My project is organized into five main folders: `backend`, `data`, `frontend`, and `tests`.
 
-In the `frontend` folder, I create the map in `map.py` and the website itself in `website.py`. The templates folder contains the HTML structure of the website's pages, while the static folder contains the CSS used to design the website.
+The `data` folder contains countries.geojson, which stores the GeoJSON data used to display country borders on the map.
+
+The `backend` folder contains the main backend logic:
+- `search_api.py`: sends requests to the Nominatim API to retrieve location data and coordinates for countries and cities that the user wants to add to the map.
+- `database.py`: creates and manages the SQLite database. It contains functions for saving, deleting, and retrieving users' countries and cities.
+- `borders.py`: processes the GeoJSON data from the data folder and uses it to create layers for visited countries.
+
+The visual and interactive parts of the application are organized in the `frontend` folder:
+- `map.py`: creates and configures the map.
+- `website.py`: contains the Flask routes and handles communication between the frontend, backend, and database.
+The templates folder contains the HTML files for the website pages.
+
+To ensure that the main parts of the application work correctly, I added automated `tests` in the tests folder.
+
+The project also includes `main.py` as the main entry point, `requirements.txt` with the project dependencies.
