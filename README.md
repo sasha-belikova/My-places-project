@@ -1,4 +1,6 @@
-﻿Hi! This is my first project using Python and JavaScript: “My Places.”
+﻿Hi! This is my first project using Python and JavaScript: “My Places.” 
+[Click here to visit the website](sashaaaa.pythonanywhere.com)
+
 My Places is a website where you can keep track of the cities and countries you have visited. You can search for a city or country, save it to your personal map, and see all your saved places in one place. You can also view your saved cities and countries separately, and delete them whenever you want.
 
 How to run:
